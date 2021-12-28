@@ -1,0 +1,1 @@
+cl /std:c++17 unarchive_sigmf.cpp -Ie:\libarchive-v3.5.2-win64\libarchive\include /EHsc /out:unarchive_sigmf.exe archive.lib
