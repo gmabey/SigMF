@@ -34,33 +34,7 @@ from .archive import SigMFArchive, SIGMF_DATASET_EXT, SIGMF_METADATA_EXT, SIGMF_
 from .utils import dict_merge, insert_sorted_dict_list
 from .error import SigMFFileError, SigMFAccessError
 
-class SigMFFileIterator():
-    def __init__(self, sigmf_file):
-        self.sigmf_file = sigmf_file
-        self.pos = 0
-
-    def __next__(self):
-        if self.pos >= len(self.sigmf_file):
-            raise StopIteration
-        a = self.sigmf_file[self.pos]
-        self.pos += 1
-        return a
-
 class SigMFFile():
-    '''
-    API for SigMF I/O
-
-    Parameters
-    ----------
-    metadata: str or dict, optional
-        Metadata for associated dataset.
-    data_file: str, optional
-        Path to associated dataset.
-    global_info: dict, optional
-        Set global field shortcut if creating new object.
-    skip_checksum: bool, default False
-        When True will skip calculating hash on data_file (if present) to check against metadata.
-    '''
     START_INDEX_KEY = "core:sample_start"
     LENGTH_INDEX_KEY = "core:sample_count"
     GLOBAL_INDEX_KEY = "core:global_index"
@@ -111,11 +85,28 @@ class SigMFFile():
         AUTHOR_KEY, COLLECTION_DOI_KEY, DESCRIPTION_KEY, EXTENSIONS_KEY, LICENSE_KEY, STREAMS_KEY, VERSION_KEY
     ]
 
-    def __init__(self, metadata=None, data_file=None, global_info=None, skip_checksum=False):
+    def __init__(self, metadata=None, data_file=None, global_info=None, skip_checksum=False, batch_size=1):
+        '''
+        API for SigMF I/O
+
+        Parameters
+        ----------
+        metadata: str or dict, optional
+            Metadata for associated dataset.
+        data_file: str, optional
+            Path to associated dataset.
+        global_info: dict, optional
+            Set global field shortcut if creating new object.
+        skip_checksum: bool, default False
+            When True will skip calculating hash on data_file (if present) to check against metadata.
+        batch_size: int, default 1
+            When using file as iterator, will retrieve this many samples per iteration.
+        '''
         self.version = None
         self.schema = None
         self.data_file = None
         self.sample_count = 0
+        self.batch_size = batch_size
 
         if metadata is None:
             self._metadata = get_default_metadata(self.get_schema())
@@ -140,7 +131,26 @@ class SigMFFile():
         return self._memmap.shape[0]
 
     def __iter__(self):
-        return SigMFFileIterator(self)
+        '''special method to iterate through samples'''
+        self.iter_position = 0
+        return self
+
+    def __next__(self):
+        '''get next batch of samples'''
+        start_index = self.iter_position * self.batch_size
+        stop_index = (self.iter_position + 1) * self.batch_size
+        if stop_index < len(self):
+            # normal batch 
+            self.iter_position += 1
+            return self.read_samples(start_index, count=self.batch_size)
+        elif start_index < len(self):
+            # smaller final batch
+            count = len(self) - start_index
+            self.iter_position += 1
+            return self.read_samples(start_index, count=count)
+        else:
+            # no more data
+            raise StopIteration
 
     def __getitem__(self, sli):
         a = self._memmap[sli] # matches behavior of numpy.ndarray.__getitem__()

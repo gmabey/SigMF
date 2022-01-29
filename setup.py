@@ -44,6 +44,6 @@ setup(
         'gui': 'pysimplegui==4.0.0'
     },
     setup_requires=['pytest-runner'],
-    tests_require=['pytest>3'],
+    tests_require=['pytest>3', 'hypothesis'],
     zip_safe=False
 )
