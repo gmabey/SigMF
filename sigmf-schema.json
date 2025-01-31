@@ -131,23 +131,23 @@
           "additionalItems": false,
           "items": {
             "type": "object",
-            "required": ["name", "version", "optional"],
-            "properties": {
-              "name": {
-                "description": "The name of the SigMF extension namespace.",
-                "type": "string"
-              },
-              "version": {
-                "description": "The version of the extension namespace specification used.",
-                "examples": ["1.2.0"],
-                "type": "string"
-              },
-              "optional": {
-                "description": "If this field is `true`, the extension is REQUIRED to parse this Recording.",
-                "type": "boolean"
-              }
-            },
-            "additionalProperties": false
+                "required": ["name", "version", "optional"],
+                "properties": {
+                  "name": {
+                    "description": "The name of the SigMF extension namespace.",
+                    "type": "string"
+                  },
+                  "version": {
+                    "description": "The version of the extension namespace specification used.",
+                    "examples": ["1.2.0"],
+                    "type": "string"
+                  },
+                  "optional": {
+                    "description": "If this field is `true`, the extension is REQUIRED to parse this Recording.",
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
           }
         }
       },
@@ -232,7 +232,6 @@
         "type": "object",
         "title": "Annotation",
             "required": ["core:sample_start"],
-            "type": "object",
             "properties": {
               "core:sample_start": {
                 "default": 0,
