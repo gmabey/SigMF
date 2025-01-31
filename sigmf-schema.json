@@ -130,28 +130,23 @@
           "additionalItems": false,
           "items": {
             "type": "object",
-            "anyOf": [
-              {
-                "required": ["name", "version", "optional"],
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "description": "The name of the SigMF extension namespace.",
-                    "type": "string"
-                  },
-                  "version": {
-                    "description": "The version of the extension namespace specification used.",
-                    "examples": ["1.2.0"],
-                    "type": "string"
-                  },
-                  "optional": {
-                    "description": "If this field is `true`, the extension is REQUIRED to parse this Recording.",
-                    "type": "boolean"
-                  }
-                },
-                "additionalProperties": false
+            "required": ["name", "version", "optional"],
+            "properties": {
+              "name": {
+                "description": "The name of the SigMF extension namespace.",
+                "type": "string"
+              },
+              "version": {
+                "description": "The version of the extension namespace specification used.",
+                "examples": ["1.2.0"],
+                "type": "string"
+              },
+              "optional": {
+                "description": "If this field is `true`, the extension is REQUIRED to parse this Recording.",
+                "type": "boolean"
               }
-            ]
+            },
+            "additionalProperties": false
           }
         }
       },
@@ -164,10 +159,7 @@
       "additionalItems": false,
       "items": {
         "type": "object",
-        "anyOf": [
-          {
             "required": ["core:sample_start"],
-            "type": "object",
             "properties": {
               "core:sample_start": {
                 "default": 0,
@@ -228,8 +220,6 @@
               }
             },
             "additionalProperties": true
-          }
-        ]
       }
     },
     "annotations": {
@@ -240,8 +230,6 @@
       "items": {
         "type": "object",
         "title": "Annotation",
-        "anyOf": [
-          {
             "required": ["core:sample_start"],
             "type": "object",
             "properties": {
@@ -289,8 +277,6 @@
               }
             },
             "additionalProperties": true
-          }
-        ]
       }
     }
   },
