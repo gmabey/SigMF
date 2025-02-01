@@ -131,20 +131,35 @@
           "additionalItems": false,
           "items": {
             "type": "object",
-                "required": ["name", "version", "optional"],
+                "required": ["namespace", "schema"],
                 "properties": {
-                  "name": {
-                    "description": "The name of the SigMF extension namespace.",
+                  "namespace": {
+                    "description": "The namespace used by the SigMF extension.",
+                    "examples": ["antenna", "wifi"],
                     "type": "string"
                   },
-                  "version": {
-                    "description": "The version of the extension namespace specification used.",
-                    "examples": ["1.2.0"],
+                  "schema": {
+                    "description": "The $id of the extension specification used.",
+                    "examples": [
+                        "https://raw.githubusercontent.com/sigmf/SigMF/refs/tags/v1.2.6/extensions/sigmf-antenna-schema.json",
+                        "https://raw.githubusercontent.com/sigmf/community-extensions/refs/tags/2025-01-01/sigmf-wifi-schema.json"
+                    ],
                     "type": "string"
                   },
                   "optional": {
                     "description": "If this field is `true`, the extension is REQUIRED to parse this Recording.",
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": true
+                  },
+                  "name": {
+                    "description": "Deprecated property for identifying the extension.",
+                    "type": "string",
+                    "deprecated": true
+                  },
+                  "version": {
+                    "description": "Deprecated property for identifying a specific extension version.",
+                    "type": "string",
+                    "deprecated": true
                   }
                 },
                 "additionalProperties": false
